@@ -44,3 +44,8 @@ body {
 .product-page-price{
     font-size: 19px;
 }
+
+.card-icon {
+    height: 20px;
+    padding-left: 20px;
+}
