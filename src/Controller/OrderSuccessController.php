@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classe\Cart;
+use App\Classe\Mail;
 use App\Entity\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,14 +37,16 @@ class OrderSuccessController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        if (!$order->getIsPaid()){
+        if ($order->getState() == 0){
             // Vider la session "cart"
             $cart->remove();
             // Modifier le statut de isPaid de notre commande en mettant 1
-            $order->setIsPaid(1);
+            $order->setState(1);
             $this->entityManager->flush();
 
-            // Envoyer un email à notre client pour lui confirmer sa commande
+            $mail = New Mail();
+            $content = 'Bonjour '.$order->getUser()->getFullName().'<br>Merci pour votre commmande.<br><br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur cumque cupiditate laudantium nemo placeat, quod tenetur totam? Adipisci architecto at blanditiis, delectus, deserunt doloribus ipsam recusandae similique soluta tenetur velit.';
+            $mail->send($order->getUser()->getEmail(), $order->getUser()->getFullName(), 'Votre commande sur la Boutique Portugaise est bien validée.', $content);
         }
 
         // Afficher les quelques informations de la commande de l'utilisateur
