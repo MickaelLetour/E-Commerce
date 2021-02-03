@@ -41,7 +41,7 @@ class Cart {
         return $this->session->get('cart');
     }
 
-    public function remove(Cart $cart)
+    public function remove()
     {
         return $this->session->remove('cart');
     }
